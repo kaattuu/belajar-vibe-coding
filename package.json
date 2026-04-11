@@ -1,0 +1,24 @@
+{
+  "name": "belajar-vibe-coding",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "latest",
+    "drizzle-kit": "latest"
+  },
+  "dependencies": {
+    "elysia": "latest",
+    "drizzle-orm": "latest",
+    "mysql2": "latest"
+  },
+  "scripts": {
+    "dev": "bun --watch index.ts",
+    "db:generate": "bun x drizzle-kit generate",
+    "db:push": "bun x drizzle-kit push"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
