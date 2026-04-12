@@ -63,4 +63,25 @@ export class UsersService {
 
     return token;
   }
+
+  static async getCurrentUser(token: string) {
+    // 1. Join sessions and users to find the user associated with the token
+    const result = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        createdAt: users.createdAt,
+      })
+      .from(sessions)
+      .innerJoin(users, eq(sessions.userId, users.id))
+      .where(eq(sessions.token, token))
+      .limit(1);
+
+    if (result.length === 0) {
+      throw new Error("unauthorized");
+    }
+
+    return result[0];
+  }
 }
