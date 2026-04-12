@@ -2,6 +2,13 @@ import { Elysia, t } from "elysia";
 import { UsersService } from "../services/users-service";
 
 export const usersRoute = new Elysia()
+  .derive(({ headers }) => {
+    const authHeader = headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return { token: null };
+    }
+    return { token: authHeader.split(" ")[1] };
+  })
   .group("/api/users", (app) =>
     app
       .post(
@@ -41,34 +48,26 @@ export const usersRoute = new Elysia()
           }),
         }
       )
-      .get("/current", async ({ headers, set }) => {
+      .get("/current", async ({ token, set }) => {
         try {
-          const authHeader = headers.authorization;
-          if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            throw new Error("unauthorized");
-          }
+          if (!token) throw new Error("unauthorized");
 
-          const token = authHeader.split(" ")[1];
           const user = await UsersService.getCurrentUser(token);
           return { data: user };
         } catch (error: any) {
-          set.status = 401;
+          set.status = error.message === "unauthorized" ? 401 : 500;
           return { error: error.message };
         }
       })
   )
-  .delete("/api/logout", async ({ headers, set }) => {
+  .delete("/api/logout", async ({ token, set }) => {
     try {
-      const authHeader = headers.authorization;
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new Error("unauthorized");
-      }
+      if (!token) throw new Error("unauthorized");
 
-      const token = authHeader.split(" ")[1];
       await UsersService.logout(token);
       return { data: "OK" };
     } catch (error: any) {
-      set.status = 401;
+      set.status = error.message === "unauthorized" ? 401 : 500;
       return { error: error.message };
     }
   });
