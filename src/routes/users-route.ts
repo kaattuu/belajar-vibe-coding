@@ -33,6 +33,10 @@ export const usersRoute = new Elysia()
             summary: "Registrasi User Baru",
             description: "Mendaftarkan akun user baru ke database.",
           },
+          response: {
+            200: t.Object({ data: t.String() }),
+            400: t.Object({ error: t.String() }),
+          },
         }
       )
       .post(
@@ -56,6 +60,10 @@ export const usersRoute = new Elysia()
             summary: "Login User",
             description: "Melakukan otentikasi user dan mengembalikan session token.",
           },
+          response: {
+            200: t.Object({ data: t.String() }),
+            400: t.Object({ error: t.String() }),
+          },
         }
       )
       .get("/current", async ({ token, set }) => {
@@ -75,6 +83,18 @@ export const usersRoute = new Elysia()
           summary: "Melihat Data Profil saat ini",
           description: "Mendapatkan informasi profil user yang sedang login (butuh Bearer Token).",
         },
+        response: {
+          200: t.Object({
+            data: t.Object({
+              id: t.Number(),
+              name: t.String(),
+              email: t.String(),
+              createdAt: t.Any(),
+            }),
+          }),
+          401: t.Object({ error: t.String() }),
+          500: t.Object({ error: t.String() }),
+        },
       })
   )
   .delete("/api/logout", async ({ token, set }) => {
@@ -93,5 +113,10 @@ export const usersRoute = new Elysia()
       tags: ["Users"],
       summary: "Logout User",
       description: "Menghapus session token dan keluar dari sistem.",
+    },
+    response: {
+      200: t.Object({ data: t.String() }),
+      401: t.Object({ error: t.String() }),
+      500: t.Object({ error: t.String() }),
     },
   });
