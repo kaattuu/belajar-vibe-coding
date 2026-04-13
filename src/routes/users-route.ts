@@ -28,6 +28,11 @@ export const usersRoute = new Elysia()
             email: t.String({ maxLength: 255, format: "email" }),
             password: t.String({ minLength: 6, maxLength: 255 }),
           }),
+          detail: {
+            tags: ["Users"],
+            summary: "Registrasi User Baru",
+            description: "Mendaftarkan akun user baru ke database.",
+          },
         }
       )
       .post(
@@ -46,6 +51,11 @@ export const usersRoute = new Elysia()
             email: t.String(),
             password: t.String(),
           }),
+          detail: {
+            tags: ["Users"],
+            summary: "Login User",
+            description: "Melakukan otentikasi user dan mengembalikan session token.",
+          },
         }
       )
       .get("/current", async ({ token, set }) => {
@@ -58,6 +68,13 @@ export const usersRoute = new Elysia()
           set.status = error.message === "unauthorized" ? 401 : 500;
           return { error: error.message };
         }
+      },
+      {
+        detail: {
+          tags: ["Users"],
+          summary: "Melihat Data Profil saat ini",
+          description: "Mendapatkan informasi profil user yang sedang login (butuh Bearer Token).",
+        },
       })
   )
   .delete("/api/logout", async ({ token, set }) => {
@@ -70,4 +87,11 @@ export const usersRoute = new Elysia()
       set.status = error.message === "unauthorized" ? 401 : 500;
       return { error: error.message };
     }
+  },
+  {
+    detail: {
+      tags: ["Users"],
+      summary: "Logout User",
+      description: "Menghapus session token dan keluar dari sistem.",
+    },
   });

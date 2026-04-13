@@ -11,7 +11,8 @@
   "dependencies": {
     "elysia": "latest",
     "drizzle-orm": "latest",
-    "mysql2": "latest"
+    "mysql2": "latest",
+    "@elysiajs/swagger": "latest"
   },
   "scripts": {
     "dev": "bun --watch index.ts",
