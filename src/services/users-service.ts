@@ -3,6 +3,10 @@ import { users, sessions } from "../db/schema";
 import { eq } from "drizzle-orm";
 
 export class UsersService {
+  /**
+   * Mendaftarkan user baru ke dalam database.
+   * Melakukan pengecekan email unik, hashing password, dan penyimpanan data user.
+   */
   static async registerUser(payload: any) {
     // 1. Check if email already exists
     const existingUser = await db
@@ -31,6 +35,10 @@ export class UsersService {
     return { success: true };
   }
 
+  /**
+   * Melakukan proses login pengguna.
+   * Memvalidasi email dan password, kemudian membuat session token jika sukses.
+   */
   static async login(payload: any) {
     // 1. Find user by email
     const user = await db
@@ -64,6 +72,9 @@ export class UsersService {
     return token;
   }
 
+  /**
+   * Mengambil data profil user yang sedang login berdasarkan session token.
+   */
   static async getCurrentUser(token: string) {
     // 1. Join sessions and users to find the user associated with the token
     const result = await db
@@ -85,6 +96,9 @@ export class UsersService {
     return result[0];
   }
 
+  /**
+   * Menghapus session token dari database untuk proses logout.
+   */
   static async logout(token: string) {
     // 1. Find session by token
     const session = await db
