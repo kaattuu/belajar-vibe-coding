@@ -9,10 +9,10 @@
     "drizzle-kit": "latest"
   },
   "dependencies": {
-    "elysia": "latest",
+    "@elysiajs/swagger": "^1.3.1",
     "drizzle-orm": "latest",
-    "mysql2": "latest",
-    "@elysiajs/swagger": "latest"
+    "elysia": "latest",
+    "mysql2": "latest"
   },
   "scripts": {
     "dev": "bun --watch index.ts",
